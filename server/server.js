@@ -1,19 +1,48 @@
-var express = require('express');
-var bodyParser = require('body-parser');
+//************************************* */
+//*** Top level declarations
+const
+  express = require('express'),
+  bodyParser = require('body-parser'),
 
-// var { mongoose } = require('./db/mongoose');
-var { get_weather } = require('./controllers/get_weahter');
+  { mongoose } = require('./db/mongoose'),
+  { get_weather } = require('./controllers/get_weahter'),
+  { create_user } = require('./controllers/create_user'),
+  User = require('./models/user'),
+  app = express();
+//************************************* */
 
-var app = express();
+// Using Body parser for json parsing
 app.use(bodyParser.json());
 
+
+//*** Server Initialization
 app.listen(3000, () => {
   console.log('Server running at port: 3000');
 });
 
+//*** PLAYGROUND
+// let user = new User({email: 'itismohsinali2@yahoo.com'});
+// user.chats.push({message: "Hows the weather.", sender: "User"});
+// user.save().then((user) => {
+//   console.log(user);
+// }, (err) => {
+//   console.log('Unable to create user: ', err.message);
+// });
 
 
+/******************************** 
+ * POST
+ * Expects @city and @date as params in body
+ * Calls World Weather Online API and return JSON response
+*/
 app.post("/get_weather", get_weather);
+
+
+/******************************** 
+ * POST
+ * Expects @email as param in body
+*/
+app.post("/users", create_user);
 
 
 module.exports = { app };

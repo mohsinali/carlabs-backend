@@ -3,11 +3,12 @@
   require('dotenv').load();
 // }
 
-const http = require('http');
-const host = process.env.WEATHER_API_HOST;
-const wwoApiKey = process.env.WEATHER_API_KEY;
+const 
+  http = require('http'),
+  host = process.env.WEATHER_API_HOST,
+  wwoApiKey = process.env.WEATHER_API_KEY
 
-var get_weather = (req, res) => {
+let get_weather = (req, res) => {
   // Get the city and date from the request
   let city = req.body.result.parameters['geo-city']; // city is a required param
   // Get the date for the weather forecast (if present)
@@ -30,10 +31,12 @@ var get_weather = (req, res) => {
 
 function callWeatherApi (city, date) {
   return new Promise((resolve, reject) => {
+    
     // Create the path for the HTTP request to get the weather
     let path = '/premium/v1/weather.ashx?format=json&num_of_days=1' +
       '&q=' + encodeURIComponent(city) + '&key=' + wwoApiKey + '&date=' + date;
     console.log('API Request: ' + host + path);
+    
     // Make the HTTP request to get the weather
     http.get({host: host, path: path}, (res) => {
       let body = ''; // var to store the response chunks
