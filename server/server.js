@@ -21,15 +21,6 @@ app.listen(3000, () => {
   console.log('Server running at port: 3000');
 });
 
-//*** PLAYGROUND
-// let user = new User({email: 'itismohsinali2@yahoo.com'});
-// user.chats.push({message: "Hows the weather.", sender: "User"});
-// user.save().then((user) => {
-//   console.log(user);
-// }, (err) => {
-//   console.log('Unable to create user: ', err.message);
-// });
-
 
 /******************************** 
  * POST
