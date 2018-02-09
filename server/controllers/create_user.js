@@ -1,4 +1,4 @@
-const User = require('./../models/user');
+const User = require('../models/user');
 
 let create_user = (req, res) => {  
   let user = new User({email: req.body.email});
