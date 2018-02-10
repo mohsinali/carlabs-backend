@@ -19,6 +19,7 @@
   "homepage": "https://github.com/mohsinali/carlabs-backend#readme",
   "dependencies": {
     "body-parser": "^1.18.2",
+    "dialogflow": "^0.1.0",
     "dotenv": "^5.0.0",
     "express": "^4.16.2",
     "mongodb": "^3.0.2",
