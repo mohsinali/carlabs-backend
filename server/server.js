@@ -17,6 +17,14 @@ const
 // Using Body parser for json parsing
 app.use(bodyParser.json());
 
+//*** Enable CORS
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
+
 
 //*** Server Initialization
 app.listen(3000, () => {
@@ -31,7 +39,10 @@ app.listen(3000, () => {
 */
 app.post("/get_weather", get_weather);
 
-
+app.get("/test", (req, res, next) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.status(200).send(JSON.stringify({ 'message': "here you go" }));
+});
 
 //##### RESOURCE: USER
 

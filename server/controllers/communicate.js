@@ -4,52 +4,83 @@ const
   projectId = process.env.PROJECT_ID,
   sessionId = process.env.SESSION_ID
 
-let communicate = async (req, res) => {
+const communicate = (req, res) => {
   res.setHeader('Content-Type', 'application/json');
 
   let params = req.body;
 
+  getWeatherUpdate(params).then((weather) => {
+    res.status(200).send(JSON.stringify({ 'message': weather }));
+  });
+  // const weather = await get_user(params.email);
   // Verify email
-  user = await User.findOne({email: params.email});
+  // user = await get_user(params.email);
+  
+  // if(user){
+  //   try {
+  //     // save user's message in db
+  //     await save_chat(user, params.message, 'user');
+  
+  //     // hit dialogflow
+  //     // msg = await get_dialogflow_response(params.message);
+  
+  //     // save bot's message in db
+  //     await save_chat(user, "params.message", 'bot');
+  
+  //     // return response
+  //     await res.status(200).send(JSON.stringify({ 'message': "msg" }));
+  //   } catch (ex) {
+  //     console.log("=========== Exception - communicate ===========");
+  //     console.log(ex.message);
 
-  if(user){
-    try {
-      // save user's message in db
-      await save_chat(user, params.message, 'user');
-  
-      // hit dialogflow
-      msg = await get_dialogflow_response(params.message);
-  
-      // save bot's message in db
-      await save_chat(user, msg, 'bot');
-  
-      // return response
-      await res.status(200).send(JSON.stringify({ 'message': "msg" }));
-    } catch (ex) {
-      console.log("=========== Exception - communicate ===========");
-      console.log(ex.message);
-
-      res.status(500).send(JSON.stringify({ "error": true, 'message': "Couldn't process the request." }));  
-    }
-  }else{
-    res.status(401).send(JSON.stringify({ "error": true, 'message': "Unauthorized access." }));
-  }
+  //     res.status(500).send(JSON.stringify({ "error": true, 'message': "Couldn't process the request." }));  
+  //   }
+  // }else{
+  //   res.status(401).send(JSON.stringify({ "error": true, 'message': "Unauthorized access." }));
+  // }
 };
 
-
-save_chat = async (user, message, sender) => {
-  console.log("debugging: **** ", message);
-  user.chats.push({message: message, sender: sender});
+const getWeatherUpdate = async (params) => {
+  user = await get_user(params.email);
+  chat = await save_chat(user, params.message, 'user');
+  weather_update = await get_dialogflow_response(params.message);
+  console.log("Weahter update: " + weather_update);
   
-  user.save().then((docUser) => {
-    console.log("Chat message saved successfully.");
-  }).catch((err) => {
-    console.log("Unable to save chat message: ", err.message);
+  return `Its sunny. ${chat}`;
+}
+
+get_user = (email) => {
+  return User.findOne({email: email}).then((user) => {    
+    return user;
   });
 }
 
+save_chat = (user, message, sender) => {
+  user.chats.push({message: message, sender: sender});
+  return user.save().then((docUser) => {
+    return user;
+  });
 
-get_dialogflow_response = async (message) => {
+  // return new Promise((resolve, reject) => {
+  //   user.chats.push({message: message, sender: sender});
+
+  //   user.save().then((docUser) => {
+  //     console.log("Chat message saved successfully.");
+  //     return user;
+  //   });    
+  // });
+  // console.log("debugging: **** ", message);
+  // user.chats.push({message: message, sender: sender});
+  
+  // user.save().then((docUser) => {
+  //   console.log("Chat message saved successfully.");
+  // }).catch((err) => {
+  //   console.log("Unable to save chat message: ", err.message);
+  // });
+}
+
+
+get_dialogflow_response = (message) => {
   let dialogflow_res_message = "";
 
   // Instantiates a sessison client
