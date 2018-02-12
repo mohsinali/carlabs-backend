@@ -1,7 +1,7 @@
 // Load .env only on development server. The production server will have its own environment variables
-// if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== 'production') {
   require('dotenv').load();
-// }
+}
 
 const 
   http = require('http'),

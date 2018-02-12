@@ -12,32 +12,7 @@ const communicate = (req, res) => {
   getWeatherUpdate(params).then((weather) => {
     res.status(200).send(JSON.stringify({ 'message': weather }));
   });
-  // const weather = await get_user(params.email);
-  // Verify email
-  // user = await get_user(params.email);
   
-  // if(user){
-  //   try {
-  //     // save user's message in db
-  //     await save_chat(user, params.message, 'user');
-  
-  //     // hit dialogflow
-  //     // msg = await get_dialogflow_response(params.message);
-  
-  //     // save bot's message in db
-  //     await save_chat(user, "params.message", 'bot');
-  
-  //     // return response
-  //     await res.status(200).send(JSON.stringify({ 'message': "msg" }));
-  //   } catch (ex) {
-  //     console.log("=========== Exception - communicate ===========");
-  //     console.log(ex.message);
-
-  //     res.status(500).send(JSON.stringify({ "error": true, 'message': "Couldn't process the request." }));  
-  //   }
-  // }else{
-  //   res.status(401).send(JSON.stringify({ "error": true, 'message': "Unauthorized access." }));
-  // }
 };
 
 const getWeatherUpdate = async (params) => {
@@ -61,22 +36,6 @@ save_chat = (user, message, sender) => {
     return user;
   });
 
-  // return new Promise((resolve, reject) => {
-  //   user.chats.push({message: message, sender: sender});
-
-  //   user.save().then((docUser) => {
-  //     console.log("Chat message saved successfully.");
-  //     return user;
-  //   });    
-  // });
-  // console.log("debugging: **** ", message);
-  // user.chats.push({message: message, sender: sender});
-  
-  // user.save().then((docUser) => {
-  //   console.log("Chat message saved successfully.");
-  // }).catch((err) => {
-  //   console.log("Unable to save chat message: ", err.message);
-  // });
 }
 
 
@@ -101,29 +60,6 @@ get_dialogflow_response = (message) => {
     },
   };
 
-  // if (!promise) {
-  //   // First query.
-  //   console.log(`Sending query "${message}"`);
-  //   promise = sessionClient.detectIntent(request);
-  // } else {
-  //   promise = promise.then(responses => {
-  //     console.log('Detected intent');
-  //     const response = responses[0];      
-
-  //     // Use output contexts as input contexts for the next query.
-  //     response.queryResult.outputContexts.forEach(context => {        
-  //       context.parameters = structjson.jsonToStructProto(
-  //         structjson.structProtoToJson(context.parameters)
-  //       );
-  //     });
-  //     request.queryParams = {
-  //       contexts: response.queryResult.outputContexts,
-  //     };
-
-  //     console.log(`Sending query "${query}"`);
-  //     return sessionClient.detectIntent(request);
-  //   });
-  // }
   promise = sessionClient.detectIntent(request);
   return promise
             .then(responses => {
