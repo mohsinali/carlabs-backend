@@ -44,9 +44,9 @@ const getWeatherUpdate = async (params) => {
   user = await get_user(params.email);
   chat = await save_chat(user, params.message, 'user');
   weather_update = await get_dialogflow_response(params.message);
-  console.log("Weahter update: " + weather_update);
+  chat = await save_chat(user, weather_update, 'bot');  
   
-  return `Its sunny. ${chat}`;
+  return weather_update;
 }
 
 get_user = (email) => {
@@ -101,41 +101,42 @@ get_dialogflow_response = (message) => {
     },
   };
 
-  if (!promise) {
-    // First query.
-    console.log(`Sending query "${message}"`);
-    promise = sessionClient.detectIntent(request);
-  } else {
-    promise = promise.then(responses => {
-      console.log('Detected intent');
-      const response = responses[0];      
+  // if (!promise) {
+  //   // First query.
+  //   console.log(`Sending query "${message}"`);
+  //   promise = sessionClient.detectIntent(request);
+  // } else {
+  //   promise = promise.then(responses => {
+  //     console.log('Detected intent');
+  //     const response = responses[0];      
 
-      // Use output contexts as input contexts for the next query.
-      response.queryResult.outputContexts.forEach(context => {        
-        context.parameters = structjson.jsonToStructProto(
-          structjson.structProtoToJson(context.parameters)
-        );
-      });
-      request.queryParams = {
-        contexts: response.queryResult.outputContexts,
-      };
+  //     // Use output contexts as input contexts for the next query.
+  //     response.queryResult.outputContexts.forEach(context => {        
+  //       context.parameters = structjson.jsonToStructProto(
+  //         structjson.structProtoToJson(context.parameters)
+  //       );
+  //     });
+  //     request.queryParams = {
+  //       contexts: response.queryResult.outputContexts,
+  //     };
 
-      console.log(`Sending query "${query}"`);
-      return sessionClient.detectIntent(request);
-    });
-  }
+  //     console.log(`Sending query "${query}"`);
+  //     return sessionClient.detectIntent(request);
+  //   });
+  // }
+  promise = sessionClient.detectIntent(request);
+  return promise
+            .then(responses => {
+              console.log('Detected intent');
+              dialogflow_res_message = responses[0].queryResult["fulfillmentText"];
+              console.log(responses[0].queryResult["fulfillmentText"]);
+              return dialogflow_res_message;
+            })
+            .catch(err => {
+              console.error('ERROR:', err);
+            });
 
-  promise
-    .then(responses => {
-      console.log('Detected intent');
-      dialogflow_res_message = responses[0].queryResult["fulfillmentText"];
-      console.log(responses[0].queryResult["fulfillmentText"]);
-    })
-    .catch(err => {
-      console.error('ERROR:', err);
-    });
-
-  return dialogflow_res_message;  
+  
 }
 
 module.exports = { communicate };
