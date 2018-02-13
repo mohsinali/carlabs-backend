@@ -63,13 +63,13 @@ get_dialogflow_response = (message) => {
   promise = sessionClient.detectIntent(request);
   return promise
             .then(responses => {
-              console.log('Detected intent');
+              logger.debug('Detected intent');
               dialogflow_res_message = responses[0].queryResult["fulfillmentText"];
-              console.log(responses[0].queryResult["fulfillmentText"]);
+              logger.debug(responses[0].queryResult["fulfillmentText"]);
               return dialogflow_res_message;
             })
             .catch(err => {
-              console.error('ERROR:', err);
+              logger.error('ERROR:', err);
             });
 
   

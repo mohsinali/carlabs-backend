@@ -1,9 +1,10 @@
 //************************************* */
-//*** Top level declarations
+//*** Top level declarations / includes
 const
   express = require('express'),
   bodyParser = require('body-parser'),
   dialogflow = require('dialogflow'),
+  
 
   { mongoose } = require('./db/mongoose'),
   { get_weather } = require('./controllers/get_weahter'),
@@ -11,6 +12,7 @@ const
   { create_chat } = require('./controllers/create_chat'),
   { communicate } = require('./controllers/communicate'),
   User = require('./models/user'),
+  logger = require("./utils/logger"),
   app = express();
 //************************************* */
 
@@ -28,7 +30,7 @@ app.use(function(req, res, next) {
 
 //*** Server Initialization
 app.listen(3000, () => {
-  console.log('Server running at port: 3000');
+  logger.debug('Server running at port: 3000');
 });
 
 
@@ -41,9 +43,9 @@ app.post("/get_weather", get_weather);
 
 
 //*** Not inuse. Only for testing purposes
-app.get("/test", (req, res, next) => {
+app.get("/test", (req, res, next) => {  
   res.setHeader('Content-Type', 'application/json');
-  res.status(200).send(JSON.stringify({ 'message': "here you go" }));
+  res.status(200).send(JSON.stringify({ 'message': "here you go" }));  
 });
 
 //##### RESOURCE: USER
