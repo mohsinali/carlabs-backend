@@ -1,6 +1,10 @@
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').load();
+}
+
 const mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost:27017/carlabs');
+mongoose.connect(process.env.DB_HOST);
 
 module.exports = { mongoose };
