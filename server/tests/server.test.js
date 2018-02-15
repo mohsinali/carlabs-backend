@@ -35,5 +35,23 @@ describe('POST /users', () => {
   });
 
 
+  it('should not create user without email',(done) => {
+    request(app)
+      .post("/users")
+      .send({email: ""})
+      .expect(400)
+      .end((err, res) => {
+        if(err){
+          return done(err);
+        }
+
+        User.find().then((users) => {
+          expect(users.length).toBe(0);
+          done();
+        }).catch((e) => done(e));
+      });
+  });
+
+
 
 });
