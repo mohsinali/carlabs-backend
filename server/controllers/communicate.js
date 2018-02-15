@@ -2,7 +2,8 @@ const
   User = require('../models/user'),
   dialogflow = require('dialogflow'),
   projectId = process.env.PROJECT_ID,
-  sessionId = process.env.SESSION_ID
+  sessionId = process.env.SESSION_ID,
+  logger = require("../utils/logger")
 
 const communicate = (req, res) => {
   res.setHeader('Content-Type', 'application/json');
@@ -17,9 +18,9 @@ const communicate = (req, res) => {
 
 const getWeatherUpdate = async (params) => {
   user = await get_user(params.email);
-  chat = await save_chat(user, params.message, 'user');
+  user_chat = await save_chat(user, params.message, 'user');
   weather_update = await get_dialogflow_response(params.message);
-  chat = await save_chat(user, weather_update, 'bot');  
+  user_chat = await save_chat(user, weather_update, 'bot');  
   
   return weather_update;
 }
