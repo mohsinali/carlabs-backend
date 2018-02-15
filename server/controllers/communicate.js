@@ -10,14 +10,18 @@ const communicate = (req, res) => {
 
   let params = req.body;
 
-  getWeatherUpdate(params).then((weather) => {
+  getWeatherUpdate(params, res).then((weather) => {
     res.status(200).send(JSON.stringify({ 'message': weather }));
   });
   
 };
 
-const getWeatherUpdate = async (params) => {
+const getWeatherUpdate = async (params, res) => {
   user = await get_user(params.email);
+  if(!user){
+    res.status(200).send(JSON.stringify({ error: true, 'message': 'Invalid email address.' }));
+  }
+
   user_chat = await save_chat(user, params.message, 'user');
   weather_update = await get_dialogflow_response(params.message);
   user_chat = await save_chat(user, weather_update, 'bot');  
