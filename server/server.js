@@ -9,6 +9,7 @@ const
   { mongoose } = require('./db/mongoose'),
   { get_weather } = require('./controllers/get_weahter'),
   { create_user } = require('./controllers/create_user'),
+  get_user = require('./controllers/get_user'),
   { create_chat } = require('./controllers/create_chat'),
   { communicate } = require('./controllers/communicate'),
   User = require('./models/user'),
@@ -23,6 +24,7 @@ app.use(bodyParser.json());
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.setHeader('Content-Type', 'application/json');
   next();
 });
 
@@ -55,6 +57,14 @@ app.get("/test", (req, res, next) => {
  * Expects @email as param in body
 */
 app.post("/users", create_user);
+
+
+/******************************** 
+ * GET
+ * Expects @email as param in body
+ * Returns complete user object
+*/
+app.get("/users/:email", get_user);
 
 
 //##### RESOURCE: CHAT
